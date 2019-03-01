@@ -14,6 +14,7 @@ func main() {
 	bc = bc.DecodeFromJSON(jsonBlockChain)
 	fmt.Println("blockChain: ", bc)
 	jsonNew := bc.EncodeToJSON()
+	fmt.Println("BLOCK JSON: ", jsonNew)
 	var realValue []PrivateBlockchain.BlockJson
 	var expectedValue []PrivateBlockchain.BlockJson
 	json.Unmarshal([]byte(jsonNew), &realValue)
