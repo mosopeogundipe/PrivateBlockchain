@@ -71,8 +71,9 @@ func CreateGenesisBlock(value p1.MerklePatriciaTrie) Block {
 }
 
 func (b *Block) EncodeToJSON() string {
+	//	fmt.Println("BLOCK KEY VAL: ", b.Value.GetMptKeyValues())
 	blockJsonObject := BlockJson{Height: b.Header.Height, Timestamp: b.Header.Timestamp,
-		Hash: b.Header.Hash, ParentHash: b.Header.ParentHash, Size: b.Header.Size, MPT: b.Value.GetMptKeyValues()}
+		Hash: b.Header.Hash, ParentHash: b.Header.ParentHash, Size: b.Header.Size, MPT: b.Value.KeyVal}
 	blockJsonStr, _ := json.Marshal(blockJsonObject)
 	return string(blockJsonStr)
 }
@@ -88,6 +89,7 @@ func convertBlockJsonToBlock(blockJsonObject BlockJson) Block {
 		ParentHash: blockJsonObject.ParentHash, Size: blockJsonObject.Size}
 	mpt := p1.MerklePatriciaTrie{}
 	mpt.Initial()
+	fmt.Println("MPT: ", blockJsonObject.MPT)
 	for key, value := range blockJsonObject.MPT {
 		mpt.Insert(key, value)
 	}
@@ -102,6 +104,7 @@ func (bc *BlockChain) EncodeToJSON() string {
 	//fmt.Println("BC LEN: ", len(bc.Chain))
 	for key := range bc.Chain {
 		value := bc.Chain[key]
+		fmt.Println("VALUE:", value)
 		//fmt.Println("LIST LEN: ", len(value))
 		for index := range value {
 			blockJson = value[index].EncodeToJSON()

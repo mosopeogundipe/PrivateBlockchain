@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var keyVal map[string]string
+//var KeyVal map[string]string
 
 type Flag_value struct {
 	encoded_prefix []uint8
@@ -23,8 +23,9 @@ type Node struct {
 }
 
 type MerklePatriciaTrie struct {
-	db   map[string]Node
-	root string
+	db     map[string]Node
+	root   string
+	KeyVal map[string]string
 }
 
 func (mpt *MerklePatriciaTrie) GetRoot() string {
@@ -69,10 +70,10 @@ func (mpt MerklePatriciaTrie) get_helper(current_node Node, new_path []uint8) st
 }
 
 func (mpt *MerklePatriciaTrie) Insert(key string, new_value string) {
-	if len(keyVal) == 0 {
-		keyVal = make(map[string]string)
+	if len(mpt.KeyVal) == 0 {
+		mpt.KeyVal = make(map[string]string)
 	}
-	keyVal[key] = new_value
+	mpt.KeyVal[key] = new_value
 	var strToAscii []uint8
 	var decoded []uint8
 	strToAscii = str_to_ascii(key)
@@ -698,6 +699,6 @@ func (mpt *MerklePatriciaTrie) Order_nodes() string {
 	return rs
 }
 
-func (mpt *MerklePatriciaTrie) GetMptKeyValues() map[string]string {
-	return keyVal
-}
+//func (mpt *MerklePatriciaTrie) GetMptKeyValues() map[string]string {
+//	return keyVal
+//}
