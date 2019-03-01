@@ -1,7 +1,7 @@
 package PrivateBlockchain
 
 import (
-	"MPT/p1"
+	"PrivateBlockchain/MPT/p1"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
