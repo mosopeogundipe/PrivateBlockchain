@@ -166,16 +166,21 @@ Inserts a Block into the Blockchain
 */
 func (bc *BlockChain) Insert(block Block) {
 	var blockList []Block
-	if bc.Length == 0 && len(bc.Chain) == 0 {
-		bc.Chain = make(map[int32][]Block)
-		blockList = append(blockList, block)
-		bc.Chain[bc.Length] = blockList
+	if !bc.isBlockInBlockChain(block) {
+		if bc.Length == 0 && len(bc.Chain) == 0 {
+			bc.Chain = make(map[int32][]Block)
+			blockList = append(blockList, block)
+			bc.Chain[bc.Length] = blockList
+		} else {
+			blockList = append(blockList, block)
+			bc.Chain[bc.Length+1] = blockList
+		}
+		maxHeight := bc.FindMaxHeight()
+		bc.Length = maxHeight
 	} else {
-		blockList = append(blockList, block)
-		bc.Chain[bc.Length+1] = blockList
+		fmt.Println("block with hash ", block.Header.Hash, "already exists in blockchain")
 	}
-	maxHeight := bc.FindMaxHeight()
-	bc.Length = maxHeight
+
 }
 
 /**
@@ -189,4 +194,17 @@ func (bc *BlockChain) FindMaxHeight() int32 {
 		}
 	}
 	return maxIndex
+}
+
+func (bc *BlockChain) isBlockInBlockChain(block Block) bool {
+	for key := range bc.Chain {
+		value := bc.Chain[key]
+		for index := range value {
+			blockInChain := value[index]
+			if blockInChain.Header.Hash == block.Header.Hash {
+				return true
+			}
+		}
+	}
+	return false
 }
